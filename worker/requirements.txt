@@ -1,0 +1,13 @@
+ultralytics>=8.3.0
+lap>=0.5.12          # required by the BoT-SORT tracker; do not rely on runtime auto-install
+opencv-python-headless>=4.9
+numpy>=1.26
+scipy>=1.11
+pandas>=2.1
+scikit-learn>=1.4
+psycopg[binary]>=3.1
+redis>=5.0
+google-genai>=1.0
+# optional, enable with JERSEY_OCR=easyocr / REID_ENCODER=osnet:
+# easyocr
+# torchreid

@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:16
+    environment: { POSTGRES_USER: insightplay, POSTGRES_PASSWORD: insightplay, POSTGRES_DB: insightplay }
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U insightplay"], interval: 5s, retries: 10 }
+  redis:
+    image: redis:7
+    volumes: [redisdata:/data]
+    healthcheck: { test: ["CMD", "redis-cli", "ping"], interval: 5s, retries: 10 }
+  api:
+    build: ./api
+    env_file: .env
+    ports: ["4000:4000"]
+    volumes: [uploads:/data/uploads]
+    depends_on: { postgres: { condition: service_healthy }, redis: { condition: service_healthy } }
+  worker:
+    build: ./worker
+    env_file: .env
+    volumes: [uploads:/data/uploads]
+    depends_on: { postgres: { condition: service_healthy }, redis: { condition: service_healthy }, api: { condition: service_started } }
+    # GPU hosts: uncomment (requires the NVIDIA container toolkit)
+    # deploy: { resources: { reservations: { devices: [{ driver: nvidia, count: all, capabilities: [gpu] }] } } }
+    # Scale throughput with: docker compose up --scale worker=2
+volumes: { pgdata: {}, redisdata: {}, uploads: {} }

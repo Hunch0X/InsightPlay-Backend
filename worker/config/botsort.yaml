@@ -1,0 +1,16 @@
+# BoT-SORT configuration (Ultralytics). The tracker runs on *analysed* frames (ANALYSIS_FPS, default 10),
+# so track_buffer is counted in analysed frames: 60 => a track survives ~6 s of occlusion at 10 fps.
+tracker_type: botsort
+track_high_thresh: 0.30
+track_low_thresh: 0.10
+new_track_thresh: 0.40
+track_buffer: 60
+match_thresh: 0.80
+fuse_score: True
+# Camera-motion compensation: essential for panning broadcast/tactical cameras.
+gmc_method: sparseOptFlow
+# Appearance re-identification inside the tracker (needs a recent Ultralytics build). Enable for crowded scenes.
+proximity_thresh: 0.5
+appearance_thresh: 0.25
+with_reid: False
+model: auto
